@@ -9,7 +9,6 @@ version = __version__ = '0.0.1'
 
 class Encryption(object):
    
-
     def __init__(self, magic, access_key, password):
         self.bs = 16
         self.key = hashlib.md5(bytearray(access_key, "utf8") + magic).digest() + \

@@ -63,19 +63,15 @@ class Gateway(object):
         url += path
 
         try:
-            async with self.websession.request('get', url, headers=headers) as res:
-        #        if res.content_type != 'application/json':
-        #            raise ResponseError(
-        #                'Invalid content type: {}'.format(res.content_type))
+            async with self.websession.get(url, headers=headers) as res:
                 data = await res.text()
-        #        _raise_on_error(data)
                 return data
         except client_exceptions.ClientError as err:
             raise RequestError(
                 'Error requesting data from {}: {}'.format(self.host, err)
             ) from None
 
-    async def submit(self, data, path):
+    async def submit(self, path, data):
         headers = {'User-agent': 'TeleHeater/2.2.3' ,'Accept': 'application/json'}
         
         """Make a request to the API."""
@@ -83,10 +79,14 @@ class Gateway(object):
         
         url += path
 
-      #  try:
-       #     async with self.websession.request('put', url, data, headers=headers) as req:
+        try:
+            async with self.websession.put(url, data=data, headers=headers) as req:
+                await req.text()
 
-           
+        except client_exceptions.ClientError as err:
+            raise RequestError(
+                'Error putting data to {}: {}'.format(self.host, err)
+            ) from None
         #    if not req.status == 204:
          #       self.logger.debug(req.read())
 
@@ -102,5 +102,12 @@ class Gateway(object):
         data = await self.get(path)
         jsondata =  json.loads(data)
         return jsondata
+
+    async def set_value(self, path, value):
+        data = json.dumps({"value": value})
+        encrypted = self.encryption.encrypt(data)
+        result = await self.submit(path, encrypted)
+        return result
+    
             
 
