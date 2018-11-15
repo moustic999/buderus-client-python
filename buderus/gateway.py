@@ -5,10 +5,9 @@ from io import StringIO
 
 from aiohttp import client_exceptions
 
-from .encryption import Encryption
+from .encryption import Encryption  
 from .gateway_info import Gateway_Info
 from .sensors import Sensors
-
 
 class Gateway(object):
     _magic = bytearray.fromhex("867845e97c4e29dce522b9a7d3a3e07b152bffadddbed7f5ffd842e9895ad1e4")
@@ -24,6 +23,7 @@ class Gateway(object):
     websession = None
     info = None
     sensors = None
+
 
     def __init__(self, websession, host, access_key, password, ):
         """
@@ -44,6 +44,7 @@ class Gateway(object):
 
     def decrypt(self, data):
         return self.encryption.decrypt(data)
+
 
     async def initialize(self):
         self.info = Gateway_Info(self.get)
@@ -101,7 +102,7 @@ class Gateway(object):
             raise RequestError(
                 'Error putting data to {}: {}'.format(self.host, err)
             ) from None
- 
+
 
     async def get(self, path):
         encrypted = await self.request(path) 
