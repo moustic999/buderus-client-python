@@ -8,6 +8,7 @@ from aiohttp import client_exceptions
 from .encryption import Encryption  
 from .gateway_info import Gateway_Info
 from .sensors import Sensors
+
 from .heating_circuits import HeatingCircuits
 
 SENSORS = [
@@ -32,8 +33,10 @@ HEATING_CIRCUIT = [
     '/heatingCircuits/{}/roomtemperature' # room current temperature
 ]
 
+
+
 class Gateway(object):
-    
+ 
     host = None
 
     serial_number = None
@@ -45,6 +48,7 @@ class Gateway(object):
     websession = None
     info = None
     sensors = None
+
     heatingcirctuits = None
 
 
@@ -60,7 +64,9 @@ class Gateway(object):
         self.host = host
         self.websession = websession
 
+
         self.encryption = Encryption(access_key, password)
+
   
     def encrypt(self, data):
         return self.encryption.encrypt(data)
@@ -80,12 +86,10 @@ class Gateway(object):
         self.sensors.registerSensor('return Temp', '/system/sensors/temperatures/return')
         await self.sensors.update()
 
+
         self.heatingcirctuits = HeatingCircuits(self.get)
         await self.heatingcirctuits.initialize()
         await self.heatingcirctuits.update()
-
-
-
 
 #    async def initialize(self):
 #        result = await self.request('get', '/')
@@ -149,3 +153,4 @@ class Gateway(object):
         data = json.dumps({"value": value})
         result = await self.set(path, data)
         return result    
+
