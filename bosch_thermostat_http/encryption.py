@@ -60,6 +60,7 @@ class Encryption:
                 return decrypted.decode("utf8").rstrip(chr(0))
             return "{}"
         except Exception as err:
+            print(decrypted)
             raise EncryptionError("Unable to decrypt: {}".format(err))
 
     def _pad(self, _s):
