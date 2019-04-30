@@ -34,7 +34,6 @@ class HttpConnector:
                     raise Response404Error('URI not exists: {}'.
                                            format(path))
                 else:
-                    # await res.close()
                     raise ResponseError('Invalid response code: {}'.
                                         format(res.status))
         

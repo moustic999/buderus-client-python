@@ -11,7 +11,7 @@ from .encryption import Encryption
 from .sensors import Sensors
 from .circuits import Circuits
 
-from .errors import RequestError, ResponseError
+from .errors import RequestError, ResponseError, Response404Error
 from .helper import deep_into
 
 
@@ -153,6 +153,8 @@ class Gateway:
             except json.JSONDecodeError as err:
                 raise ResponseError("Unable to decode Json response : {}".
                                     format(err))
+            except Response404Error as err:
+                raise ResponseError("Path does not exist : {}".format(path))
 
     async def _set(self, path, data):
         """Send message to API with given path."""
