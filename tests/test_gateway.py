@@ -47,7 +47,7 @@ async def test_get_invalidjson():
 
 async def test_update_info():
     async with  ClientSession() as session:
-        with patch('bosch_thermostat_http.gateway.Gateway.get', new=CoroutineMock(return_value={'id': '/gateway/uuid', 'value':'test_gtw'})) as mocked_get:
+        with patch('bosch_thermostat_http.gateway.Gateway.get', new=CoroutineMock(return_value={'id': '/gateway/uuid', 'value':'test_gtw_update'})) as mocked_get:
             gateway = Gateway(session, 'bla', 'aaa', 'xxx')
             await gateway._update_info()
-            assert gateway._data['/gateway']['uuid'] == 'test_gtw'
+            assert gateway._data['/gateway']['uuid'] == 'test_gtw_update'
